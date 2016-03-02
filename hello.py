@@ -1,0 +1,7 @@
+from cgi import parse_qs
+ 
+def app(environ, start_response):
+    start_response('200 OK', [('Content-type', 'text/plain')])
+    qs = parse_qs(environ['QUERY_STRING'])
+    return ['%s=%s\n' %(c,d) for c in qs for d in qs[c] ]
+   
