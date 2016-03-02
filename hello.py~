@@ -5,11 +5,19 @@
 #    qs = parse_qs(environ['QUERY_STRING'])
 #    return ['%s=%s\n' %(c,d) for c in qs for d in qs[c] ]
    
-import urlparse
+##
+#import urlparse
+#
+#def app(environ, start_response):
+#	qs = urlparse.parse_qs(environ['QUERY_STRING'])
+#	start_response('200 OK', [('Content-type', 'text/plain')])
+#	return ['%s=%s\n' %(c,d) for c in qs for d in qs[c] ]
 
+#import urlparse
+
+#?x=1&x=2&y=3
 def app(environ, start_response):
-	#qs = urlparse.parse_qs(environ['QUERY_STRING'])
-	qs = urlparse.urlparse(environ['PATH_INFO']).query
-	qs = urlparse.parse_qs(qs)
+	st = environ['QUERY_STRING']
+	qs = st.split('&')
 	start_response('200 OK', [('Content-type', 'text/plain')])
-	return ['%s=%s\n' %(c,d) for c in qs for d in qs[c] ]
+	return ['%s\n' %(c) for c in qs]	
