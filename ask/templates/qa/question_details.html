@@ -1,0 +1,10 @@
+<html>
+	<head></head>
+	<body>
+		<h1>{{ question.title }}</h1>
+		<p>{{ question.text }}; date: {{question.added_at}}</p>
+		{% for answer in answers %}
+			{% include "qa/answer.html" %}
+		{% endfor %}
+	</body>
+</html>
