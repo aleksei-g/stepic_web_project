@@ -10,7 +10,7 @@ def test(request, *args, **kwargs):
 #proverka parametrov paginatora
 def paginate(request, qs):
 	try:
-		limit = int(request.GET.get('limit', 2))
+		limit = int(request.GET.get('limit', 10))
 	except ValueError:
 		limit = 10
 	if limit > 100:
