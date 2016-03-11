@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('qa.views',
-url(r'^$', 'test', name='root'),
+url(r'^$', 'question_new', name='question_new'),
     url(r'^ask/', 'test', name='ask'),
     url(r'^login/', 'test', name='login'),
     url(r'^new/', 'test', name='new'),

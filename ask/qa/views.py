@@ -33,6 +33,7 @@ def paginate(request, qs):
 	return page
 
 
+#URL = /?page=2
 @require_GET
 def question_new(request, act_page=None):
 	questions = Question.objects.all()
@@ -45,7 +46,20 @@ def question_new(request, act_page=None):
 		})
 
 
+#URL = /popular/?page=2
+@require_GET
+def question_popular(request, act_page=None):
+	questions = Question.objects.all()
+	questions = questions.order_by('-rating')
+	page = paginate(request, questions)
+	return render(request, 'qa/question_new.html',{
+		'questions': page.object_list,
+		'paginator': page.paginator, 
+		'page': page,
+		})
 
+
+#URL = /question/5/
 @require_GET
 def question_details(request, pk=None):
 	#question = Question.objects.get(pk=pk)

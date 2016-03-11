@@ -3,7 +3,7 @@
 	<body>
 		{% for question in questions %}
 			<h1><a href="/question/{{question.id}}/">{{ question.title}}</a></h1>
-			<p>{{ question.added_at }}</p>
+			<p>rating: {{ question.rating }}; date: {{ question.added_at }}</p>
 		{% endfor %}
 		<p>{% include "qa/paginator.html" %}</p>
 	</body>

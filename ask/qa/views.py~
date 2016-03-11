@@ -10,7 +10,7 @@ def test(request, *args, **kwargs):
 #proverka parametrov paginatora
 def paginate(request, qs):
 	try:
-		limit = int(request.GET.get('limit', 2))
+		limit = int(request.GET.get('limit', 10))
 	except ValueError:
 		limit = 10
 	if limit > 100:
@@ -29,10 +29,11 @@ def paginate(request, qs):
 		page = paginator.page(paginator.num_pages)
 	
 	#paginator.baseurl = '?page='
-	paginator.baseurl = request.method + '?page='
+	paginator.baseurl = request.path + '?page='
 	return page
 
 
+#URL = /?page=2
 @require_GET
 def question_new(request, act_page=None):
 	questions = Question.objects.all()
@@ -45,7 +46,20 @@ def question_new(request, act_page=None):
 		})
 
 
+#URL = /popular/?page=2
+@require_GET
+def question_popular(request, act_page=None):
+	questions = Question.objects.all()
+	questions = questions.order_by('-rating')
+	page = paginate(request, questions)
+	return render(request, 'qa/question_new.html',{
+		'questions': page.object_list,
+		'paginator': page.paginator, 
+		'page': page,
+		})
 
+
+#URL = /question/5/
 @require_GET
 def question_details(request, pk=None):
 	#question = Question.objects.get(pk=pk)
