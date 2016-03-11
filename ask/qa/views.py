@@ -52,7 +52,7 @@ def question_popular(request, act_page=None):
 	questions = Question.objects.all()
 	questions = questions.order_by('-rating')
 	page = paginate(request, questions)
-	return render(request, 'qa/question_new.html',{
+	return render(request, 'qa/question_popular.html',{
 		'questions': page.object_list,
 		'paginator': page.paginator, 
 		'page': page,

@@ -1,9 +1,9 @@
 {% extends "qa/base.html" %}
 {% block title %}
-	{{ block.super }} - главная
+	{{ block.super }} - популярное
 {% endblock %}
 {% block content %}
-	<h2>Новое</h2>
+	<h2>Популярные вопросы</h2>
 	{% for question in questions %}
 		<h3><a href="/question/{{question.id}}/">{{ question.title}}</a></h3>
 		<p>rating: {{ question.rating }}; date: {{ question.added_at }}</p>

@@ -1,1 +1,1 @@
-<p>{{ answer.text answer.added_at}}</p>
+<p>{{ answer.text }} {{answer.added_at}}</p>
