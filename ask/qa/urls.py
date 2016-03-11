@@ -2,7 +2,7 @@ from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('qa.views',
 url(r'^$', 'question_new', name='question_new'),
-    url(r'^ask/', 'test', name='ask'),
+    url(r'^ask/', 'question_add', name='question_add'),
     url(r'^login/', 'test', name='login'),
     url(r'^new/', 'test', name='new'),
     url(r'^popular/', 'question_popular', name='question_popular'),

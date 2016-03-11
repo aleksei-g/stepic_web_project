@@ -9,4 +9,4 @@ mysql -u root -e "create database Ask_db"
 cd /home/box/web/ask/
 #sudo python manage.py makemigrations qa
 #sudo python manage.py migrate
-manage.py syncdb
+python manage.py syncdb

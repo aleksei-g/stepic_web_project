@@ -1,8 +1,9 @@
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage
 from django.views.decorators.http import require_GET
 from qa.models import Question, Answer
+from qa.forms import AskForm
 
 def test(request, *args, **kwargs):
 	return HttpResponse('OK')
@@ -52,7 +53,7 @@ def question_popular(request, act_page=None):
 	questions = Question.objects.all()
 	questions = questions.order_by('-rating')
 	page = paginate(request, questions)
-	return render(request, 'qa/question_new.html',{
+	return render(request, 'qa/question_popular.html',{
 		'questions': page.object_list,
 		'paginator': page.paginator, 
 		'page': page,
@@ -62,7 +63,6 @@ def question_popular(request, act_page=None):
 #URL = /question/5/
 @require_GET
 def question_details(request, pk=None):
-	#question = Question.objects.get(pk=pk)
 	question = get_object_or_404(Question, pk=pk)	
 	try:
 		answers = Answer.objects.all()
@@ -70,14 +70,23 @@ def question_details(request, pk=None):
 		answers = answers.order_by('added_at')
 		#answers = answers.order_by('id')
 	except Answer.DoesNotExist:
-		answers = None
-	#response = HttpResponse(
-	#	content = '<html><h1>'+pk+'</h1></html>',
-	#	content_type = 'text/html',
-	#	status = 200,	
-	#)
-	#return HttpResponse(question.title+';\n'+question.text)
+		answer = None
 	return render(request, 'qa/question_details.html', {
 	'question': question,	
 	'answers': answers,
+	})
+
+
+#URL = /ask/
+def question_add(request):
+	if request.method == "POST":
+		form = AskForm(request.POST)
+		if form.is_valid():
+			question = form.save()
+			#return HttpResponseRedirect(question.get_url())
+			return HttpResponseRedirect("/question/"+str(question.id)+"/")
+	else:
+		form = AskForm()
+	return render(request, 'qa/question_add.html', {
+		'form': form
 	})
