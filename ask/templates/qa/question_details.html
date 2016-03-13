@@ -13,6 +13,7 @@
 		}
 	</style>
 		{% for answer in answers %}
-			{% include "qa/answer.html" %}
+			{% include "qa/answer_print.html" %}
 		{% endfor %}
+	{% include "qa/answer_add.html" %}
 {% endblock %}

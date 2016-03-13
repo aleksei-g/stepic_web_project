@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -30,7 +32,7 @@ class Question (models.Model):
 
 
 class Answer (models.Model):
-	text = models.TextField()
+	text = models.TextField(verbose_name="Ответить")
 	added_at = models.DateTimeField(auto_now_add=True)
 	question = models.ForeignKey(Question)
 	#author = models.ForeignKey(User)

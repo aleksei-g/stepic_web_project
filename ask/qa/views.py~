@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage
 from django.views.decorators.http import require_GET
 from qa.models import Question, Answer
-from qa.forms import AskForm
+from qa.forms import AskForm, AnswerForm
 
 def test(request, *args, **kwargs):
 	return HttpResponse('OK')
@@ -61,7 +61,7 @@ def question_popular(request, act_page=None):
 
 
 #URL = /question/5/
-@require_GET
+#@require_GET
 def question_details(request, pk=None):
 	question = get_object_or_404(Question, pk=pk)	
 	try:
@@ -71,10 +71,14 @@ def question_details(request, pk=None):
 		#answers = answers.order_by('id')
 	except Answer.DoesNotExist:
 		answer = None
+	#form = AnswerForm(request, question.id)
+	form = AnswerForm()
 	return render(request, 'qa/question_details.html', {
 	'question': question,	
 	'answers': answers,
+	'form': form
 	})
+
 
 
 #URL = /ask/
@@ -84,9 +88,27 @@ def question_add(request):
 		if form.is_valid():
 			question = form.save()
 			#return HttpResponseRedirect(question.get_url())
-			return HttpResponseRedirect("/question/"+str(question.id)+"/")
+			#return HttpResponseRedirect("/question/%s/" %question.id)
+			return HttpResponseRedirect("/question/"+str(question.id)+"/") 
 	else:
 		form = AskForm()
 	return render(request, 'qa/question_add.html', {
+		'form': form
+	})
+
+
+#URL = /answer/
+def answer_add(request, question_id):
+	if request.method == "POST":
+		form = AnswerForm(request.POST)
+		if form.is_valid():
+			answer = form.save(commit=False)
+			answer.question = Question.objects.get(id=question_id)
+			answer.save()
+			#return HttpResponseRedirect(question.get_url())
+			return HttpResponseRedirect("/question/"+str(answer.question.id)+"/")
+	else:
+		form = AnswerForm()
+	return render(request, 'qa/question_details.html', {
 		'form': form
 	})

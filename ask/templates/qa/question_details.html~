@@ -7,12 +7,17 @@
 	<div class="question_text">{{ question.text }}; date: {{question.added_at}}</div>
 	<style>
 		.question_text {
-		width: 70%+15px; 
+		width: 70%; 
 		background: darkgray;
 		margin: 15px; padding: 4px;
 		}
 	</style>
 		{% for answer in answers %}
-			{% include "qa/answer.html" %}
+			{% include "qa/answer_print.html" %}
 		{% endfor %}
+	<form class="form-horizontal" method="post" action="/answer/{{ question.id }}/">
+	{% csrf_token %}
+	{{ form }}
+	<input type="submit" class="button" value="Answer">
+	</form>
 {% endblock %}
