@@ -1,5 +1,5 @@
 from django.http import HttpResponse, Http404, HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator, EmptyPage
 from django.views.decorators.http import require_GET
 from qa.models import Question, Answer
@@ -96,12 +96,17 @@ def question_add(request):
 		'form': form
 	})
 
+def show(request, pk):
+	question = get_object_or404(Question, pk=pk)
+	form = AnswerForm(initial={'question': question.id})
+	return render(request, 'qa/question_details.html', {'q': question, 'form': form})
+
 
 #URL = /answer/
 def answer_add(request, question_id):
 	if request.method == "POST":
 		form = AnswerForm(request.POST)
-		form._question=question_id
+		#form._question=question_id
 		if form.is_valid():
 			#answer = form.save(commit=False)
 			#answer.question = Question.objects.get(id=question_id)
@@ -109,7 +114,8 @@ def answer_add(request, question_id):
 			#answer.save()
 			#return HttpResponseRedirect(question.get_url())
 			answer = form.save()
-			return HttpResponseRedirect("/question/"+str(question_id)+"/")
+			#return HttpResponseRedirect("/question/"+str(question_id)+"/")
+			return redirect('question_details', answer.question.id)
 	else:
 		form = AnswerForm()
 	return render(request, 'qa/question_details.html', {
