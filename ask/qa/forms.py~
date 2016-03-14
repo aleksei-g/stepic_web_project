@@ -36,7 +36,7 @@ class AnswerForm(forms.Form):
 #		super(AnswerForm, self).__init__(*args,**kwargs)
 
 	def clean_question(self):
-		return Question.ojects.get(pk=int(self.cleaned_data['question']))
+		return Question.objects.get(pk=int(self.cleaned_data['question']))
 	
 	def save(self):
 #		self.cleaned_data['question_id'] = self._question

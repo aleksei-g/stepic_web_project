@@ -87,9 +87,9 @@ def question_add(request):
 		form = AskForm(request.POST)
 		if form.is_valid():
 			question = form.save()
-			#return HttpResponseRedirect(question.get_url())
 			return HttpResponseRedirect("/question/%s/" %question.id)
 			#return HttpResponseRedirect("/question/"+str(question.id)+"/") 
+			return redirect('question_details', question.id)
 	else:
 		form = AskForm()
 	return render(request, 'qa/question_add.html', {
