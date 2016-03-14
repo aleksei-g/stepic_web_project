@@ -72,7 +72,7 @@ def question_details(request, pk=None):
 	except Answer.DoesNotExist:
 		answer = None
 	#form = AnswerForm(request, question.id)
-	form = AnswerForm()
+	form = AnswerForm(initial={'question': question.id})
 	return render(request, 'qa/question_details.html', {
 	'question': question,	
 	'answers': answers,

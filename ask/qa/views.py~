@@ -109,7 +109,7 @@ def answer_add(request, question_id):
 			#answer.save()
 			#return HttpResponseRedirect(question.get_url())
 			answer = form.save()
-			return HttpResponseRedirect("/question/"+str(question.id)+"/")
+			return HttpResponseRedirect("/question/"+str(question_id)+"/")
 	else:
 		form = AnswerForm()
 	return render(request, 'qa/question_details.html', {

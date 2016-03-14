@@ -28,19 +28,22 @@ class AskForm(forms.Form):
 
 class AnswerForm(forms.Form):
 	text = forms.CharField(widget=forms.Textarea)
-	question = forms.IntegerField(widget=forms.HiddenInput);
-#	question = forms.ModelChoiceField(queryset=Question.objects.all());
+	question = forms.IntegerField(widget=forms.HiddenInput())
+#	question = forms.ModelChoiceField(queryset=Question.objects.all())
 
 #	def __init__(self, question, *args, **kwargs):
 #		self._question = question
 #		super(AnswerForm, self).__init__(*args,**kwargs)
+
+	def clean_question(self):
+		return Question.ojects.get(pk=int(self.cleaned_data['question']))
 	
 	def save(self):
-		self.cleaned_data['question_id'] = self._question
+#		self.cleaned_data['question_id'] = self._question
 		answer = Answer(**self.cleaned_data)
 #		answer.question = Question.objects.get(id=self._question)
 		answer.save()
-#		answer = Answer.objects.create(text=cleaned_data['text'], question=cleaned_data['question'])
+#		answer = Answer.objects.create(text=self.cleaned_data['text'], question=self.cleaned_data['question_id'])
 		return answer
 
 
