@@ -101,12 +101,15 @@ def question_add(request):
 def answer_add(request, question_id):
 	if request.method == "POST":
 		form = AnswerForm(request.POST)
+		form._question=question_id
 		if form.is_valid():
-			answer = form.save(commit=False)
-			answer.question = Question.objects.get(id=question_id)
-			answer.save()
+			#answer = form.save(commit=False)
+			#answer.question = Question.objects.get(id=question_id)
+			#answer.question = question_id
+			#answer.save()
 			#return HttpResponseRedirect(question.get_url())
-			return HttpResponseRedirect("/question/"+str(answer.question.id)+"/")
+			answer = form.save()
+			return HttpResponseRedirect("/question/"+str(question_id)+"/")
 	else:
 		form = AnswerForm()
 	return render(request, 'qa/question_details.html', {

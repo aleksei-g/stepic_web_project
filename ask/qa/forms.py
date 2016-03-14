@@ -26,23 +26,25 @@ class AskForm(forms.Form):
 		return question
 
 
-#class AnswerForm(forms.Form):
-#	text = forms.CharField(widget=forms.Textarea)
-#	question = forms.IntegerField();
+class AnswerForm(forms.Form):
+	text = forms.CharField(widget=forms.Textarea)
+#	question = forms.IntegerField(widget=forms.HiddenInput);
 #	question = forms.ModelChoiceField(queryset=Question.objects.all());
-#
+
 #	def __init__(self, question, *args, **kwargs):
 #		self._question = question
 #		super(AnswerForm, self).__init__(*args,**kwargs)
-#	
-#	def save(self):
-#		self.cleaned_data['question'] = self._question
-#		answer = Answer(**self.cleaned_data)
-#		answer.save()
-#		return answer
+	
+	def save(self):
+		self.cleaned_data['question_id'] = self._question
+		answer = Answer(**self.cleaned_data)
+#		answer.question = Question.objects.get(id=self._question)
+		answer.save()
+#		answer = Answer.objects.create(text=cleaned_data['text'], question=cleaned_data['question'])
+		return answer
 
 
-class AnswerForm(ModelForm):
-	class Meta:
-		model = Answer
-		fields = ['text']
+#class AnswerForm(ModelForm):
+#	class Meta:
+#		model = Answer
+#		fields = ['text']

@@ -2,7 +2,7 @@
 {% for e in form.non_field_errors %}
 	<div class="alert alert-danger">{{ e }}</div>
 {% endfor %}
-<form class="form-horizontal" method="post" action="/answer/{{ question.id }}">
+<form class="form-horizontal" method="post" action="/answer/{{ question.id }}/" question=question.id>
 	{% csrf_token %}
 	<fieldset>
 		{% for field in form %}
