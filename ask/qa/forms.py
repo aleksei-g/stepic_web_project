@@ -1,10 +1,15 @@
 from django import forms
 from django.forms import ModelForm
+from django.contrib.auth.models import User
 from qa.models import Question, Answer
 
 class AskForm(forms.Form):
-	title = forms.CharField(max_length=255) 
-	text = forms.CharField(widget=forms.Textarea)
+	title = forms.CharField(min_length = 1) 
+	text = forms.CharField(min_length = 1, widget=forms.Textarea)
+
+	def __init__(self, user=None, **kwargs):
+		self.user = user
+		super(AskForm, self).__init__(kwargs)
 
 #	def clean_title(self):
 #		title = self.cleaned_data['title']
@@ -21,25 +26,27 @@ class AskForm(forms.Form):
 #			)
 
 	def save(self):
+		self.cleaned_data['author'] = self.user
 		question = Question(**self.cleaned_data)
 		question.save()
 		return question
 
 
 class AnswerForm(forms.Form):
-	text = forms.CharField(widget=forms.Textarea)
+	text = forms.CharField(min_length=1, widget=forms.Textarea)
 	question = forms.IntegerField(widget=forms.HiddenInput())
 #	question = forms.ModelChoiceField(queryset=Question.objects.all())
 
-#	def __init__(self, question, *args, **kwargs):
-#		self._question = question
-#		super(AnswerForm, self).__init__(*args,**kwargs)
+#	def __init__(self, user=None, question=None, **kwargs):
+#		self.user = user
+#		self.question = question
+#		super(AnswerForm, self).__init__(kwargs)
 
 	def clean_question(self):
 		return Question.objects.get(pk=int(self.cleaned_data['question']))
 	
 	def save(self):
-#		self.cleaned_data['question_id'] = self._question
+		self.cleaned_data['author'] = self.user
 		answer = Answer(**self.cleaned_data)
 #		answer.question = Question.objects.get(id=self._question)
 		answer.save()
@@ -51,3 +58,18 @@ class AnswerForm(forms.Form):
 #	class Meta:
 #		model = Answer
 #		fields = ['text']
+
+
+class SignupForm(forms.Form):
+	username = forms.CharField(min_length=1)
+	email = forms.EmailField()
+	password = forms.CharField(min_length=1, widget=forms.PasswordInput)
+
+	def save(self):
+		user = User.objects.create_user(**self.cleaned_data)
+		user.save()
+		return user
+
+class LoginForm(forms.Form):
+	username = forms.CharField(min_length=1)
+	password = forms.CharField(min_length=1, widget=forms.PasswordInput)

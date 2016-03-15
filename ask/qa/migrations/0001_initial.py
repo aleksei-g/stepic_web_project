@@ -16,9 +16,9 @@ class Migration(migrations.Migration):
             name='Answer',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('text', models.TextField()),
-                ('added_at', models.DateTimeField()),
-                ('author', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('text', models.TextField(verbose_name=b'\xd0\x9e\xd1\x82\xd0\xb2\xd0\xb5\xd1\x82\xd0\xb8\xd1\x82\xd1\x8c')),
+                ('added_at', models.DateTimeField(auto_now_add=True)),
+                ('author', models.ForeignKey(to=settings.AUTH_USER_MODEL, null=True)),
             ],
             options={
             },
@@ -30,10 +30,9 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('title', models.CharField(max_length=255)),
                 ('text', models.TextField()),
-                ('added_at', models.DateTimeField()),
-                ('rating', models.IntegerField()),
-                ('likes', models.TextField()),
-                ('author', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('added_at', models.DateTimeField(auto_now_add=True)),
+                ('rating', models.IntegerField(default=0)),
+                ('author', models.ForeignKey(to=settings.AUTH_USER_MODEL, null=True)),
             ],
             options={
             },

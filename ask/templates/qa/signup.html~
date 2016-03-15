@@ -1,13 +1,13 @@
 {% extends "qa/base.html" %}
 {% block title %}
-	{{ block.super }} - Задать вопрос
+	{{ block.super }} - Регистрация
 {% endblock %}
 {% block content %}
-	<h2>Задать вопрос</h2>
+	<h2>Регистрация пользователя</h2>
 	{% for e in form.non_field_errors %}
 		<div class="alert alert-danger">{{ e }}</div>
 	{% endfor %}
-	<form class="form-horizontal" method="post" action="/">
+	<form class="form-horizontal" method="post" action="question/(\d+)/">
 		{% csrf_token %}
 		<fieldset>
 			{% for field in form %}
@@ -20,7 +20,7 @@
 		</fielset>
 		<div class="form-actions">
 			<button type="submit" class="btn btn-primary">
-			Save</button>
+			Регистрация</button>
 		</div>
 	</form>
 {% endblock %}

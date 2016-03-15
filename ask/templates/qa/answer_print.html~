@@ -1,4 +1,4 @@
-<div class="answer">{{ answer.text }} ; user: {{ answer.author }}; {{answer.added_at}}</div>
+<div class="answer">{{ answer.text }} ; user: {{ question.author }}; {{answer.added_at}}</div>
 <style>
 .answer {
 	width: 70%; 

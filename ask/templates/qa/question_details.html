@@ -4,7 +4,7 @@
 {% endblock %}
 {% block content %}
 	<h2>{{ question.title }}</h2>
-	<div class="question_text">{{ question.text }}; date: {{question.added_at}}</div>
+	<div class="question_text">{{ question.text }}; user: {{ question.author }}; date: {{question.added_at}}</div>
 	<style>
 		.question_text {
 		width: 70%; 

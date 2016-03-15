@@ -3,7 +3,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator, EmptyPage
 from django.views.decorators.http import require_GET
 from qa.models import Question, Answer
-from qa.forms import AskForm, AnswerForm
+from qa.forms import AskForm, AnswerForm, SignupForm, LoginForm
+from django.contrib.auth import authenticate, login, logout
 
 def test(request, *args, **kwargs):
 	return HttpResponse('OK')
@@ -82,42 +83,76 @@ def question_details(request, pk=None):
 
 
 #URL = /ask/
+#@login_required
 def question_add(request):
+	user = request.user
 	if request.method == "POST":
-		form = AskForm(request.POST)
+		#form = AskForm(request.POST)
+		text = request.POST['text']
+		title = request.POST['title']
+		form = AskForm(user, text=text, title=title)
 		if form.is_valid():
 			question = form.save()
 			return HttpResponseRedirect("/question/%s/" %question.id)
 			#return HttpResponseRedirect("/question/"+str(question.id)+"/") 
 			return redirect('question_details', question.id)
 	else:
-		form = AskForm()
+		form = AskForm(user)
 	return render(request, 'qa/question_add.html', {
 		'form': form
 	})
 
-def show(request, pk):
-	question = get_object_or404(Question, pk=pk)
-	form = AnswerForm(initial={'question': question.id})
-	return render(request, 'qa/question_details.html', {'q': question, 'form': form})
-
 
 #URL = /answer/
+#@login_required
 def answer_add(request, question_id):
 	if request.method == "POST":
 		form = AnswerForm(request.POST)
-		#form._question=question_id
+		form.user=request.user
 		if form.is_valid():
-			#answer = form.save(commit=False)
-			#answer.question = Question.objects.get(id=question_id)
-			#answer.question = question_id
-			#answer.save()
-			#return HttpResponseRedirect(question.get_url())
 			answer = form.save()
-			#return HttpResponseRedirect("/question/"+str(question_id)+"/")
 			return redirect('question_details', answer.question.id)
 	else:
 		form = AnswerForm()
-	return render(request, 'qa/question_details.html', {
+	return render(request, 'qa/question_details.html', {	
+		'form': form,
+	})
+
+
+#URL = /signup/
+def signup(request):
+	if request.method == "POST":
+		form = SignupForm(request.POST)
+		if form.is_valid():
+			form.save()
+			user = authenticate(username=request.POST.get('username'), password = request.POST.get('password'))
+			#user = form.save()
+			if user is not None and user.is_active:
+				login(request,user)
+				return HttpResponseRedirect("/")
+	else:
+		form = SignupForm()
+	return render(request, 'qa/signup.html', {
 		'form': form
 	})
+
+#URL = /login/
+def login_user(request):
+	if request.method == "POST":
+		form = LoginForm(request.POST)
+		if form.is_valid():
+			user = authenticate(username=request.POST.get('username'), password = request.POST.get('password'))
+			if user is not None and user.is_active:
+				login(request,user)
+				return HttpResponseRedirect("/")
+	else:
+		form = LoginForm()
+	return render(request, 'qa/login.html', {
+		'form': form
+	})
+
+
+#URL = /logout/
+def logout_user(request):
+	logout(request)
+	return HttpResponseRedirect("/")
