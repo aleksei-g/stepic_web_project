@@ -7,9 +7,9 @@ class AskForm(forms.Form):
 	title = forms.CharField(min_length = 1) 
 	text = forms.CharField(min_length = 1, widget=forms.Textarea)
 
-	def __init__(self, user=None, **kwargs):
-		self.user = user
-		super(AskForm, self).__init__(kwargs)
+#	def __init__(self, user=None, **kwargs):
+#		self.user = user
+#		super(AskForm, self).__init__(kwargs)
 
 #	def clean_title(self):
 #		title = self.cleaned_data['title']
@@ -29,6 +29,7 @@ class AskForm(forms.Form):
 		self.cleaned_data['author'] = self.user
 		question = Question(**self.cleaned_data)
 		question.save()
+		#question = Question.objects.create(text=self.cleaned_data['text'], title=self.cleaned_data['title'], author=self.cleaned_data['author'])
 		return question
 
 
@@ -37,10 +38,10 @@ class AnswerForm(forms.Form):
 	question = forms.IntegerField(widget=forms.HiddenInput())
 #	question = forms.ModelChoiceField(queryset=Question.objects.all())
 
-	def __init__(self, user=None, question=None, **kwargs):
-		self.user = user
-		self.question = question
-		super(AnswerForm, self).__init__(kwargs)
+#	def __init__(self, user=None, question=None, **kwargs):
+#		self.user = user
+#		self.question = question
+#		super(AnswerForm, self).__init__(kwargs)
 
 	def clean_question(self):
 		return Question.objects.get(pk=int(self.cleaned_data['question']))

@@ -85,19 +85,20 @@ def question_details(request, pk=None):
 #URL = /ask/
 #@login_required
 def question_add(request):
-	user = request.user
+	#user = request.user
 	if request.method == "POST":
-		#form = AskForm(request.POST)
-		text = request.POST['text']
-		title = request.POST['title']
-		form = AskForm(user, text=text, title=title)
+		form = AskForm(request.POST)
+		form.user=request.user
+		#text = request.POST['text']
+		#title = request.POST['title']
+		#form = AskForm(user, text=text, title=title)
 		if form.is_valid():
 			question = form.save()
 			return HttpResponseRedirect("/question/%s/" %question.id)
 			#return HttpResponseRedirect("/question/"+str(question.id)+"/") 
-			return redirect('question_details', question.id)
+			#return redirect('question_details', question.id)
 	else:
-		form = AskForm(user)
+		form = AskForm()
 	return render(request, 'qa/question_add.html', {
 		'form': form
 	})
@@ -114,8 +115,7 @@ def answer_add(request, question_id):
 			return redirect('question_details', answer.question.id)
 	else:
 		form = AnswerForm()
-	return render(request, 'qa/question_details.html', {
-		#'question': question,		
+	return render(request, 'qa/question_details.html', {	
 		'form': form,
 	})
 

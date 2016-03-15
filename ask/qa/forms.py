@@ -7,9 +7,9 @@ class AskForm(forms.Form):
 	title = forms.CharField(min_length = 1) 
 	text = forms.CharField(min_length = 1, widget=forms.Textarea)
 
-	def __init__(self, user=None, **kwargs):
-		self.user = user
-		super(AskForm, self).__init__(kwargs)
+#	def __init__(self, user=None, **kwargs):
+#		self.user = user
+#		super(AskForm, self).__init__(kwargs)
 
 #	def clean_title(self):
 #		title = self.cleaned_data['title']
@@ -24,11 +24,12 @@ class AskForm(forms.Form):
 #				u'No validation',
 #				code = 1
 #			)
-
+#
 	def save(self):
 		self.cleaned_data['author'] = self.user
 		question = Question(**self.cleaned_data)
 		question.save()
+		#question = Question.objects.create(text=self.cleaned_data['text'], title=self.cleaned_data['title'], author=self.cleaned_data['author'])
 		return question
 
 
