@@ -86,8 +86,8 @@ def question_details(request, pk=None):
 #@login_required
 def question_add(request):
 	user = request.user
-	if not user.is_authenticated():
-		raise Http404
+	#if not user.is_authenticated():
+	#	return HttpResponseRedirect('/')
 	if request.method == "POST":# and user is not None and user.is_active:
 		form = AskForm(request.POST)
 		form.user=request.user
@@ -97,9 +97,9 @@ def question_add(request):
 		if form.is_valid():
 			question = form.save()
 			#return HttpResponseRedirect("/question/%s/" %question.id)
-			#return HttpResponseRedirect("/question/"+str(question.id)+"/") 
+			return HttpResponseRedirect("/question/"+str(question.id)+"/") 
 			#return redirect('question_details', question.id)
-			return redirect("/question/%s/" %question.id)
+			#return redirect("/question/%s/" %question.id)
 	else:
 		form = AskForm()
 	return render(request, 'qa/question_add.html', {
