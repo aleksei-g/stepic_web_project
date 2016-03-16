@@ -4,8 +4,8 @@ from django.contrib.auth.models import User
 from qa.models import Question, Answer
 
 class AskForm(forms.Form):
-	title = forms.CharField(min_length = 1) 
-	text = forms.CharField(min_length = 1, widget=forms.Textarea)
+	title = forms.CharField()#min_length = 1) 
+	text = forms.CharField(widget=forms.Textarea)#,min_length = 1)
 
 #	def __init__(self, user=None, **kwargs):
 #		self.user = user
@@ -24,12 +24,12 @@ class AskForm(forms.Form):
 #				u'No validation',
 #				code = 1
 #			)
-
+#
 	def save(self):
 		self.cleaned_data['author'] = self.user
-		question = Question(**self.cleaned_data)
-		question.save()
-		#question = Question.objects.create(text=self.cleaned_data['text'], title=self.cleaned_data['title'], author=self.cleaned_data['author'])
+		#question = Question(**self.cleaned_data)
+		#question.save()
+		question = Question.objects.create(text=self.cleaned_data['text'], title=self.cleaned_data['title'], author=self.user)
 		return question
 
 
